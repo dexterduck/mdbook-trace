@@ -2,7 +2,7 @@
 name = "mdbook-trace"
 version = "0.1.0"
 edition = "2021"
-authors = ["Dexter Duckworth"]
+authors = ["Dexter Duckworth <dexterduck@users.noreply.github.com>"]
 license = "MIT"
 readme = "README.md"
 description = "A traceable document preprocessor for mdbook."
