@@ -1,6 +1,9 @@
 # mdbook-trace
 
-![https://crates.io/crates/mdbook-trace](https://img.shields.io/crates/v/mdbook-trace)
+[![crates.io][crates-badge]][crates-url]
+
+[crates-badge]: https://img.shields.io/crates/v/mdbook-trace
+[crates-url]: https://crates.io/crates/mdbook-trace
 
 A traceable document preprocessor for mdbook.
 
