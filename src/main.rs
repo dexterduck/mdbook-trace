@@ -50,7 +50,7 @@ impl Default for Config {
             qualified_footnotes: false,
             footnote_divider: false,
             chapter_numbers: false,
-            parent_numbering: ParentNumbering::Offset,
+            parent_numbering: ParentNumbering::Zero,
             record_heading: "Record".to_string(),
             trace_heading: "Traces".to_string(),
             targets: HashMap::default(),
@@ -63,11 +63,20 @@ pub struct TargetConfig {
     pub name: String,
 }
 
+/// ParentNumbering defines the trace numbering strategy for a page with subchapters.
 #[derive(Debug, Clone, Copy, serde::Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub enum ParentNumbering {
+    /// Number traces as normal.
+    /// This will result in traces with the same number as subchapters.
+    /// (e.g. the first trace and first subchapter of chapter 1 will both be numbered 1.1)
     AllowDuplicates,
+    /// Offset trace numbers from the last subchapter.
+    /// (e.g. if chapter 1 has 2 subchapters, the first trace will be numbered 1.3)
     Offset,
+    /// Insert a ".0" qualifier before traces in a page with subchapters.
+    /// (e.g. if chapter 1 has 1 subchapter, the first trace will be 1.0.1).
+    Zero,
 }
 
 fn main() {
@@ -169,10 +178,7 @@ impl Traceable {
 
     fn generate_traces(&self, chapter: &mut Chapter) -> Result<(), Error> {
         let mut footnotes = vec![];
-        let mut count = match self.config.parent_numbering {
-            ParentNumbering::AllowDuplicates => 0,
-            ParentNumbering::Offset => chapter.sub_items.len() as u32,
-        };
+        let mut count = 0;
         let mut res = Ok(());
 
         let content = TRACE_RE
@@ -190,7 +196,19 @@ impl Traceable {
                 };
 
                 let mut number = chapter.number.clone().unwrap_or_default().0;
-                number.push(count);
+                match self.config.parent_numbering {
+                    ParentNumbering::Zero => {
+                        if !chapter.sub_items.is_empty() {
+                            number.push(0);
+                        }
+                        number.push(count);
+                    }
+                    ParentNumbering::AllowDuplicates => number.push(count),
+                    ParentNumbering::Offset => {
+                        number.push(count + (chapter.sub_items.len() as u32));
+                    }
+                };
+
                 let trace = Trace::new(
                     chapter.path.clone(),
                     number,

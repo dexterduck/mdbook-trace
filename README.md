@@ -48,10 +48,6 @@ This will be rendered as
 Below is the full set of preprocessor configuration options and their default values:
 ```toml
 [preprocessor.trace]
-# If "offset", traces in a page with child pages are numbered starting from the last child page.
-# e.g. a reference in page 1 with 2 child pages would be numbered 1.3
-# If "allow-duplicates", traces in a page are always numbered starting from 1. This may result in a trace having the same number as a child page.
-parent-numbering = "offset"
 # Use fully-qualified trace number as in-page footnote number
 # e.g. "Some text^1" becomes "Some text^1.2.1"
 qualified-footnotes = false
@@ -64,4 +60,13 @@ footnote-divider = false
 record-heading = "Record"
 # Heading used for the second column of generated trace tables.
 trace-heading = "Traces"
+# The trace numbering strategy for a page with subchapters.
+# If "allow-duplicates", number traces as normal.
+# This will result in traces with the same number as subchapters.
+# (e.g. the first trace and first subchapter of chapter 1 will both be numbered 1.1)
+# If "offset", offset trace numbers from the last subchapter.
+# (e.g. if chapter 1 has 2 subchapters, the first trace will be numbered 1.3)
+# If "zero", insert a ".0" qualifier before traces in a page with subchapters.
+# (e.g. if chapter 1 has 1 subchapter, the first trace will be 1.0.1).
+parent-numbering = "zero"
 ```
