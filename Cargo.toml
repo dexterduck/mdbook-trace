@@ -8,6 +8,8 @@ readme = "README.md"
 description = "A traceable document preprocessor for mdbook."
 keywords = ["mdbook", "preprocessor"]
 exclude = ["test_book/*"]
+repository = "https://github.com/dexterduck/mdbook-trace"
+homepage = "https://github.com/dexterduck/mdbook-trace"
 
 [dependencies]
 anyhow = "1.0.62"
