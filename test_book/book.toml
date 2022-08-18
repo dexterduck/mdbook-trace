@@ -1,0 +1,16 @@
+[book]
+authors = ["Dexter Duckworth"]
+language = "en"
+multilingual = false
+src = "src"
+title = "Test Book"
+
+[preprocessor.trace]
+chapter-numbers = true
+footnote-divider = true
+
+[preprocessor.trace.targets.doc]
+name = "My Document"
+
+[preprocessor.trace.targets.appendix]
+name = "Appendix"
