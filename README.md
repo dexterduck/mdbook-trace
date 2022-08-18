@@ -1,5 +1,7 @@
 # mdbook-trace
 
+![https://crates.io/crates/mdbook-trace](https://img.shields.io/crates/v/mdbook-trace)
+
 A traceable document preprocessor for mdbook.
 
 `mdbook-trace` provides a markdown extension to define a *trace* from the current document to a record in some external document. Each trace generates a footnote in the current page and is added to a *trace table* for the target document.
