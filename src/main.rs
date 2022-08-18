@@ -156,12 +156,15 @@ impl Traceable {
 
     fn target(&self, target: impl AsRef<str>) -> Result<RefMut<'_, Target>, Error> {
         let targets = self.targets.borrow_mut();
-        match RefMut::filter_map(targets, |t| t.get_mut(target.as_ref())) {
-            Ok(t) => Ok(t),
-            Err(_) => Err(anyhow::anyhow!(
+        if targets.contains_key(target.as_ref()) {
+            Ok(RefMut::map(targets, |t| {
+                t.get_mut(target.as_ref()).unwrap()
+            }))
+        } else {
+            Err(anyhow::anyhow!(
                 "no target defined with id '{}'.",
                 target.as_ref()
-            )),
+            ))
         }
     }
 
@@ -404,7 +407,7 @@ impl Trace {
 
     pub fn footnote(&self) -> String {
         format!(
-            "<a name=\"#note{}\"></a><sup>{}</sup>",
+            "<a name=\"note{}\"></a><sup>{}</sup>",
             self.number("_", true),
             self.number(".", self.qualified)
         )
